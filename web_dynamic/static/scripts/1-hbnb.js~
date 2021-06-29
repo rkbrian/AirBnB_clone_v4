@@ -1,5 +1,5 @@
+#!/usr/bin/node
 const amdict = {};
-    
 // Attach a change event handler to the checkboxes.
 $("input").change(function() {
     $("input").each(function( {
