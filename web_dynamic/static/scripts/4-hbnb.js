@@ -1,15 +1,17 @@
-function itsSoFetch (dictAmen) {
-    if (dictAmen === undefined){
-        dictAmen = {};
+function itsSoFetch (amenities) {
+    if (amenities === undefined) {
+        amenities = {};
     }
+    console.log(amenities);
     $.ajax({
-      url: 'http://0.0.0.0:5001/api/v1/places_search',
+      url: 'http://134add2f7e14.4fd667c2.hbtn-cod.io:5001/api/v1/places_search',
+      data: JSON.stringify(amenities),
       method: 'POST',
-      dataType: 'json',
-      data: JSON.stringify(dictAmen),
-      contentType: 'application/json',
+      dataType: 'json',      
       processData: false,
+      contentType: 'application/json',
       success: function (places) {
+        $('.places').html('');
         for (const index in places) {
           const place = places[index];
           let artlist = `<article>
@@ -22,7 +24,7 @@ function itsSoFetch (dictAmen) {
           if (place.max_guest !== 1) {
             artlist += 's';
           }
-          artlist += `</div>
+          artlist += `</div> 
                       <div class="number_rooms">${place.number_rooms} Bedroom`;
           if (place.number_rooms !== 1) {
             artlist += 's';
@@ -43,9 +45,9 @@ function itsSoFetch (dictAmen) {
       }
     });
   }
+  const amdict = {};
   $(document).ready(function () {
     itsSoFetch();
-    const amdict = {};
     // Attach a change event handler to the checkboxes.
     $('input').click(function () {
       $(':input').each(function () {
@@ -61,18 +63,18 @@ function itsSoFetch (dictAmen) {
       }
       $('.amenities h4').html(arr.join(', '));
     });
-  });
-  $.get('http://0.0.0.0:5001/api/v1/status', function (info) {
-    if (info.status === 'OK') {
+    $.get('http://0.0.0.0:5001/api/v1/status', function (info) {
+      if (info.status === 'OK') {
         $('#api_status').addClass('available');
       } else {
         $('#api_status').removeClass('available');
       }
-      $("button").click(function() {
-        const arr = [];
-        for (const key in amdict) {
-            arr.push(amdict[key]);
-        }
-        itsSoFetch ({ammenities: arr});
-      });
     });
+    $('button').click(function () {
+      const arr = [];
+      for (const key in amdict) {
+        arr.push(amdict[key]);
+      }
+      itsSoFetch({ amenities: arr });
+    });
+  });
